@@ -1,6 +1,10 @@
-require('https://code.jquery.com/jquery-3.2.1.min.js', 'js');
+require([
+	
+	{ fileUrl: 'https://code.jquery.com/jquery-3.2.1.min.js', type: 'js' }
 
-function apiRequest(params) {
+	], function() {
+
+	apiRequest = function(params) {
 	
 	this.url = params.url
 	this.apikey = params.apikey
@@ -18,40 +22,54 @@ function apiRequest(params) {
 		  return false;
 		});
 	});
-}
+	}
+});
 
-function require(fileurl, type) {
+
+
+function require(files, callback) {
 	
-	var element = "";
-	var attributes = {}; 
+	for (var i = 0; i < files.length; i++) {
+		var file = files[i];
 
-	switch (type.toLowerCase()) {
-		case 'css':
-			element = 'link';
-			attributes.rel 	= "stylesheet" 
-			attributes.type	= "text/css" 
-			attributes.href = fileurl
+		var fileurl = file.fileUrl
+		var type 	= file.type
+		
+		var element = "";
+		var attributes = {};
 
-			break;
+		switch (type.toLowerCase()) {
+			case 'css':
+				element = 'link';
+				attributes.rel 	= "stylesheet" 
+				attributes.type	= "text/css" 
+				attributes.href = fileurl
 
-		case 'js':
-		case 'javascript':
-			element = 'script';
-			attributes.type = "text/javascript" 
-			attributes.src  = fileurl
-			break;
+				break;
 
-		default:
-			return false;
+			case 'js':
+			case 'javascript':
+				element = 'script';
+				attributes.type = "text/javascript" 
+				attributes.src  = fileurl
+				break;
+
+			default:
+				return false;
+		}
+
+		var fileElement = document.createElement(element);
+
+		for (attr in attributes) {
+			fileElement.setAttribute(attr, attributes[attr]);
+		}
+
+
+		document.head.insertBefore(fileElement, document.head.children[0]);
 	}
+	
 
-	var fileElement = document.createElement(element);
-
-	for (attr in attributes) {
-		fileElement.setAttribute(attr, attributes[attr]);
-	}
-
-	document.head.appendChild(fileElement);
+	callback()
 
 	return true
 }
