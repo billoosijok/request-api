@@ -1,31 +1,42 @@
-require([
-	
-	{ fileUrl: 'https://code.jquery.com/jquery-3.2.1.min.js', type: 'js' }
 
-	], function() {
+function API_Connect(params) {
 
-	apiRequest = function(params) {
-	
 	this.url = params.url
 	this.apikey = params.apikey
+	this.timeout = params.timeout
+
+	var _timeOffIntervall = this.timeout || null;
 
 	this.request = ( (params, callback) => {
+		
 		var reqUrl = this.url + '?' + $.param(params);
 		
-		$.ajax({
-		  url: reqUrl,
-		  method: (params['method'])? params.method : 'GET',
-		}).done(function(result) {
-		    callback(result);
-		}).fail(function(err) {
-		  throw err;
-		  return false;
-		});
+		if(_timeOffIntervall) {
+			clearTimeout(_timeOffIntervall);
+		}
+
+		_timeOffIntervall = setTimeout(function() {
+
+			$.ajax({
+	  
+			  url: reqUrl,
+			  method: (params['method'])? params.method : 'GET',
+			
+			}).done(function(result) {
+			  			
+			  	callback(result);
+
+			}).fail(function(err) {
+			
+			  throw err;
+			  return false;
+			
+			});
+
+		}, 1000);
+
 	});
-	}
-});
-
-
+}
 
 function require(files, callback) {
 	
