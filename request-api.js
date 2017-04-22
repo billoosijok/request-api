@@ -3,9 +3,9 @@ function API_Connect(params) {
 
 	this.url = params.url
 	this.apikey = params.apikey
-	this.timeout = params.timeout
+	this.timeout = params.timeout || 0
 
-	var _timeOffIntervall = this.timeout || null;
+	var _timeOffIntervall = null;
 
 	this.request = ( (params, callback) => {
 		
@@ -22,18 +22,18 @@ function API_Connect(params) {
 			  url: reqUrl,
 			  method: (params['method'])? params.method : 'GET',
 			
-			}).done(function(result) {
+			}).done(function(result, status) {
 			  			
-			  	callback(result);
+			  	callback(result, status);
 
-			}).fail(function(err) {
-			
-			  throw err;
-			  return false;
+			}).fail(function(err, status) {
+				
+				callback(err, status);
+			  	throw err;
 			
 			});
 
-		}, 1000);
+		}, this.timeout);
 
 	});
 }
