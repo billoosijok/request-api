@@ -3,7 +3,7 @@ function API_Connect(params) {
 
 	this.url = params.url
 	this.apikey = params.apikey
-	this.timeout = params.timeout || 0
+	this.timeout = params.timeout || 1000
 
 	var _timeOffIntervall = null;
 
