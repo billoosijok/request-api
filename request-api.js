@@ -3,8 +3,11 @@ function API_Connect(params) {
 
 	this.url = params.url
 	this.apikey = params.apikey
-	this.timeout = params.timeout || 1000
+	this.timeout = params.timeout || 500
 
+	// This will serve as a delay for the request.
+	// this is done to prevent multiple calls within 
+	// the specified timeout variable
 	var _timeOffIntervall = null;
 
 	this.request = ( (params, callback) => {
