@@ -10,7 +10,7 @@
 				- apikey (oftype String) : The api key.
 			
 			Optional properties: 
-				- timeout (oftype Number) : The minimum duration between each API call.
+				- timeout (oftype Number) : The minimum delay-duration between each API call.
 */
 function API_Connect(params) {
 
@@ -25,10 +25,14 @@ function API_Connect(params) {
 
 	this.request = ( (params, callback) => {
 		
+		var delay = this.timeout;
+
 		var reqUrl = this.url + '?' + $.param(params);
 		
 		if(_timeOffIntervall) {
 			clearTimeout(_timeOffIntervall);
+		} else {
+			delay = 0;
 		}
 
 		_timeOffIntervall = setTimeout(function() {
@@ -48,6 +52,8 @@ function API_Connect(params) {
 			  	throw err;
 			
 			});
+
+			_timeOffIntervall = null
 
 		}, this.timeout);
 
