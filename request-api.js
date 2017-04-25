@@ -1,4 +1,17 @@
 
+/*	
+	It constructs an API object that can be used to make requests to the
+	passed api url
+	
+	@param params (oftype Object) : 
+			
+			Required properties: 
+				- url (oftype String) : The url of the API.
+				- apikey (oftype String) : The api key.
+			
+			Optional properties: 
+				- timeout (oftype Number) : The minimum duration between each API call.
+*/
 function API_Connect(params) {
 
 	this.url = params.url
