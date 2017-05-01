@@ -35,6 +35,8 @@ function API_Connect(params) {
 	*/
 	this.request = ( (params, callback) => {
 		
+		// This is used because if it was the first request 
+		// it will get set to 0. Otherwise it's the timeout parameter.		
 		var delay = this.timeout;
 
 		var reqUrl = this.url + '?' + $.param(params);
