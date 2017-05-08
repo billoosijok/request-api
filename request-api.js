@@ -3,25 +3,11 @@
 	It constructs an API object that can be used to make requests to the
 	passed api url
 	
-	@param params (Object) : 
-			
-			Required properties: 
-				- url (String) : The url of the API.
-				- apikey (String) : The api key.
-			
-			Optional properties: 
-				- timeout (Number) : The minimum delay-duration between each API call.
+	@param url (String) : The url of the API.
 */
-function API_Connect(params) {
+function API_Connect(url) {
 
-	this.url = params.url
-	this.apikey = params.apikey
-	this.timeout = params.timeout || 0
-
-	// This will serve as a delay for the request.
-	// this is done to prevent multiple calls within 
-	// the specified timeout variable
-	var _timeOffIntervall = null;
+	this.url = url
 
 	/**
 	Makes a request to the provided url.
@@ -35,39 +21,21 @@ function API_Connect(params) {
 	*/
 	this.request = ( (params, callback) => {
 		
-		// This is used because if it was the first request 
-		// it will get set to 0. Otherwise it's the timeout parameter.		
-		var delay = this.timeout;
-
 		var reqUrl = this.url + '?' + $.param(params);
+
+		$.ajax({
+  
+		  url: reqUrl,
+		  method: (params['method'])? params.method : 'GET',
 		
-		if(_timeOffIntervall) {
-			clearTimeout(_timeOffIntervall);
-		} else {
-			delay = 0;
-		}
+		}).done(function(result, status) {
+		  			
+		  	callback(result, status);
 
-		_timeOffIntervall = setTimeout(function() {
-
-			$.ajax({
-	  
-			  url: reqUrl,
-			  method: (params['method'])? params.method : 'GET',
+		}).fail(function(err, status) {
 			
-			}).done(function(result, status) {
-			  			
-			  	callback(result, status);
-
-			}).fail(function(err, status) {
-				
-				callback(err, status);
-			  	throw err;
-			
-			});
-
-			_timeOffIntervall = null
-
-		}, this.timeout);
-
-	});
+			callback(err, status);
+		
+		});
+	}
 }
