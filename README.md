@@ -6,7 +6,7 @@ Simplify api calling process
 ```javascript
 
 let api = API_Connect("$API_URL");
-let requestParams = { param: value }
+let requestParams = { param: 'value' }
 
 api.request(requestParams, callback)
 
